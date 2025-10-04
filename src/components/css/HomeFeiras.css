@@ -1,0 +1,8 @@
+#container-homefeiras {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    box-sizing: border-box;
+    width: 90%;
+    height: 50%;
+}

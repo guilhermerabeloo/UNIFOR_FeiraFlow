@@ -1,0 +1,35 @@
+#container-home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    width: 100%;
+    height: 93vh;
+}
+
+.conteudo-sessao-home {
+    width: 100%;
+}
+
+.destaque-home {
+    height: 90%;
+    width: 30vw;
+    margin-right: 15px;
+    box-shadow: 0 .1px 11px 2px rgba(68, 89, 88, .11);
+}
+
+.img-destaque-home {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80%;
+    overflow: hidden;
+}
+
+.img-destaque-home img {
+    width: 100%;
+    height: auto;
+    object-fit: cover; 
+    object-position: center; 
+    display: block;
+}
