@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 
 import App from './App.jsx'
 import Home from '../components/Home.jsx'
+import LandingPageFeira from '../components/LandingPageFeira.jsx'
 
   const router = createBrowserRouter([
     {
@@ -18,6 +19,10 @@ import Home from '../components/Home.jsx'
         {
           path: '/home',
           element: <Home />
+        },
+        {
+          path: '/landingpagefeira',
+          element: <LandingPageFeira />
         },
       ]
     }

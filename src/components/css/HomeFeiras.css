@@ -6,3 +6,27 @@
     width: 90%;
     height: 50%;
 }
+
+.destaque-informacoes-feira {
+    display: flex;
+    justify-content: space-between;
+}
+
+#feira-fechada {
+    color: #ff3300;
+    font-weight: bold;
+    font-size: clamp(.5rem, 1vw + 1rem, 2rem);
+}
+
+#feira-aberta {
+    color: #00ce11;
+    font-weight: bold;
+    font-size: clamp(.8rem, 1vw , 1rem);
+}
+
+@media screen and (max-width: 600px) {
+    #container-homefeiras {
+        padding: 10px;
+        width: 90%;
+    }
+}
