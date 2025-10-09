@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import App from './App.jsx'
 import Home from '../components/Home.jsx'
 import LandingPageFeira from '../components/LandingPageFeira.jsx'
+import LandingPageFeirante from '../components/LandingPageFeirante.jsx'
 
   const router = createBrowserRouter([
     {
@@ -21,8 +22,12 @@ import LandingPageFeira from '../components/LandingPageFeira.jsx'
           element: <Home />
         },
         {
-          path: '/landingpagefeira',
+          path: '/landingpagefeira/:id',
           element: <LandingPageFeira />
+        },
+        {
+          path: '/landingpagefeirante/:id',
+          element: <LandingPageFeirante />
         },
       ]
     }

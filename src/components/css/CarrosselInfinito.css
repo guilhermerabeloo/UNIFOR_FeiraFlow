@@ -16,6 +16,7 @@
     display: flex;
     align-items: stretch;
     height: 100%;
+    cursor: pointer;
 }
 
 .carousel-slide {

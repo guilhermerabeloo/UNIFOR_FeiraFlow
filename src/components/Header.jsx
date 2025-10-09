@@ -1,15 +1,23 @@
 import './css/Header.css'
 import logo from '../assets/logo.png'
 import { BsList, BsSearch  } from "react-icons/bs";
+import { useNavigate } from 'react-router-dom'
 
 export default function Header() {
+    const navigate = useNavigate();
+    const handleClickHome = () => {
+        navigate(`/home`)
+    }
+
     return (
         <>
             <div id="header">
                 <div id="area-utilizavel">
                     <div id="area-logo">
-                        <img src={logo} alt="logo" id="img-logo"/>
-                        <h1 id="titulo-logo">Feira Flow</h1>
+                        <div id="butao-home-header" onClick={() => handleClickHome()}>
+                            <img src={logo} alt="logo" id="img-logo"/>
+                            <h1 id="titulo-logo">Feira Flow</h1>
+                        </div>
                     </div>
                     <div id="area-busca">
                         <input type="text" placeholder="O que você está buscando?" id="input-busca"/>

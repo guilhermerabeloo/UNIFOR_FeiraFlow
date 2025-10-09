@@ -15,7 +15,7 @@
 #feira-fechada {
     color: #ff3300;
     font-weight: bold;
-    font-size: clamp(.5rem, 1vw + 1rem, 2rem);
+    font-size: clamp(.8rem, 1vw, 1rem);
 }
 
 #feira-aberta {

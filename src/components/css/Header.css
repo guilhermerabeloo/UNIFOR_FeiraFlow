@@ -17,7 +17,13 @@
     padding-left: 5%;
     box-sizing: border-box;
     height: 100%;
-    width: 5%;
+    width: 15%;
+}
+
+#butao-home-header {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
 }
 
 #img-logo {
