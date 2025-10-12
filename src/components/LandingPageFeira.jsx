@@ -1,74 +1,133 @@
-import { useState } from 'react';
 import './css/LandingPageFeira.css'
-
-import Feirante1 from '../assets/Feirante1.png'
-import Feirante2 from '../assets/Feirante2.png'
-import Feirante3 from '../assets/Feirante3.jpg'
-import FeirinhaBeiraMar from '../assets/FeirinhaBeiraMar.jpeg'
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from "react-router-dom";
+import { api } from '../lib/api.js'
 
 export default function LandingPageFeira() {
+    const { id } = useParams();
+    const navigate = useNavigate();
     const [feiraFuncionando, setFeiraFuncionando] = useState(true);
-    const [latitude, setLatitude] = useState(-3.7262528);
-    const [longitude, setLongitude] = useState(-38.4955099);
+    const [detalhamentoFeira, setDetalhamentoFeira] = useState({});
+
+    useEffect(() => {
+        // definindo feira selecionado para detalhamento
+        async function fetchFeiras() {
+            try {
+                const response = await api.get(`/buscar_feiraLandingPage/${id}`)
+                setDetalhamentoFeira(response.data)
+                
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        fetchFeiras()
+    }, [id]);
+    
+    useEffect(() => {
+        // verificando se o feira está funcionando no dia atual
+        const diaSemanaMapeado = {
+            1: 'seg',
+            2: 'ter',
+            3: 'qua',
+            4: 'qui',
+            5: 'sex',
+            6: 'sab',
+            7: 'dom'
+        }
+    
+        const dataAtual = new Date();
+        const horarioAgora = dataAtual.getHours() + (dataAtual.getMinutes() / 60);
+        let diaSemanaAtualInt = dataAtual.getDay();
+        diaSemanaAtualInt = diaSemanaAtualInt === 0 ? 7 : diaSemanaAtualInt;
+    
+        const diaSemanaAtualStr = diaSemanaMapeado[diaSemanaAtualInt];
+    
+        const horaAberturaDiaAtual = detalhamentoFeira?.agendaSemanal?.[diaSemanaAtualStr]?.horaInicio ?? null;
+        const horaFechamentoDiaAtual = detalhamentoFeira?.agendaSemanal?.[diaSemanaAtualStr]?.horaFinal ?? null;
+        
+        if (horaAberturaDiaAtual === null || horaFechamentoDiaAtual === null) {
+            setFeiraFuncionando(false);
+            return;
+        } else if (horarioAgora >= horaAberturaDiaAtual && horarioAgora <= horaFechamentoDiaAtual) {
+            setFeiraFuncionando(true);
+            return;
+        } else {
+            setFeiraFuncionando(false);
+            return;
+        }
+        
+    }, [detalhamentoFeira])
+
+    const handleClickDetalhamento = (idfeirante) => {
+        navigate(`/landingpagefeirante/${idfeirante}`)
+    };
 
     return (
         <>
             <div className="container-landingpagefeira">
                 <div className="resumo-feira">
                     <div id="titulo-resumo-feira">
-                        <h2>Feirinha da beira mar</h2>
+                        <h2>{detalhamentoFeira.descricao}</h2>
                         <div className="feira-funcionandoagora">
                             {feiraFuncionando ? <p id="feira-aberta">● Aberto agora</p> : <p id="feira-fechada">● Fechada</p>}
                         </div>
                     </div>
                     <div id="tagsprodutos-feira">
                         <ul>
-                            <li>Comidas</li>
-                            <li>Artesanatos</li>
-                            <li>Roupas</li>
-                            <li>Decoração</li>
+                            {
+                                detalhamentoFeira?.tags?.map((tag, index) => (
+                                    <li key={index}>{tag}</li>
+                                ))
+                            }
                         </ul>
                     </div>
                     <div id="detalhamento-funcionamento-feira">
                         <h4>Funcionamento</h4>
-                        <p><span>Seg: </span>08:00 a 18:00</p>
-                        <p><span>Ter: </span>08:00 a 18:00</p>
-                        <p><span>Qua: </span>08:00 a 18:00</p>
-                        <p><span>Qui: </span>08:00 a 18:00</p>
-                        <p><span>Sex: </span>08:00 a 18:00</p>
-                        <p><span>Sáb: </span>08:00 a 15:00</p>
-                        <p><span>Dom: </span>Fechado</p>
+                        <p><span>Seg: </span>{detalhamentoFeira?.agendaSemanal?.seg?.horarioFormatado}.</p>
+                        <p><span>Ter: </span>{detalhamentoFeira?.agendaSemanal?.ter?.horarioFormatado}.</p>
+                        <p><span>Qua: </span>{detalhamentoFeira?.agendaSemanal?.qua?.horarioFormatado}.</p>
+                        <p><span>Qui: </span>{detalhamentoFeira?.agendaSemanal?.qui?.horarioFormatado}.</p>
+                        <p><span>Sex: </span>{detalhamentoFeira?.agendaSemanal?.sex?.horarioFormatado}.</p>
+                        <p><span>Sáb: </span>{detalhamentoFeira?.agendaSemanal?.sab?.horarioFormatado}.</p>
+                        <p><span>Dom: </span>{detalhamentoFeira?.agendaSemanal?.dom?.horarioFormatado}.</p>
                     </div>
                     <div id="resumo-feirantes-feira">
                         <h4>Feirantes</h4>
                         <div className="feirante-feira">
-                            <img src={Feirante1}/>
-                            <img src={Feirante2}/>
-                            <img src={Feirante3}/>
+                            {
+                                detalhamentoFeira?.feirantes?.map((feirantefeira, index) => (
+                                    <img 
+                                        key={index} 
+                                        src={feirantefeira.imagem} 
+                                        title={`Visitar ${feirantefeira.descricao}`}
+                                        onClick={() => handleClickDetalhamento(feirantefeira.id)} 
+                                    />
+                                ))
+                            }
                         </div>
                     </div>
                 </div>
                 <div className="midia-feira">
                     <div className="imagens-feira">
                         <h4>Destaques</h4>
-                        <img src={FeirinhaBeiraMar} alt="Beira Mar"/>
+                        <img src={detalhamentoFeira?.imagem} alt="Beira Mar"/>
                     </div>
                     <div className="localizacao-feira">
                         <h4>Localização</h4>
                         <div className="map-wrapper">
                             <iframe
                                 title="Mapa da localização"
-                                src={`https://www.google.com/maps?q=-3.7262528,-38.4955099&z=15&output=embed`}
-                                // src={`https://www.google.com/maps?q=${latitude},${latitude}&z=15&output=embed`}
+                                src={`https://www.google.com/maps?q=${detalhamentoFeira?.latitude},${detalhamentoFeira?.longitude}&z=15&output=embed`}
                                 allowFullScreen
                                 loading="lazy"
                             />
                         </div>
                         <div className="localizacao-como-chegar">
                             <button id="como-chegar"
-                              onClick={() => {
-                                window.open(`https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`, "_blank");
-                            }}
+                                onClick={() => {
+                                    window.open(`https://www.google.com/maps/dir/?api=1&destination=${detalhamentoFeira?.latitude},${detalhamentoFeira?.longitude}`, "_blank");
+                                }}
                             >
                             Como chegar
                             </button>
